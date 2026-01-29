@@ -142,13 +142,13 @@ class SliderGlassEffect {
         this.gaussianBlurRef = document.getElementById('slider-blur');
         
         this.config = {
-            displace: 0.15,
-            distortionScale: -80,
+            displace: 0.8,
+            distortionScale: -120,
             redOffset: 0,
-            greenOffset: 4,
-            blueOffset: 8,
+            greenOffset: 10,
+            blueOffset: 20,
             brightness: 50,
-            opacity: 0.85
+            opacity: 0.9
         };
         
         if (this.slider) {
@@ -183,10 +183,10 @@ class SliderGlassEffect {
                         <stop offset="100%" stop-color="#0000ff"/>
                     </linearGradient>
                 </defs>
-                <rect x="0" y="0" width="${width}" height="${height}" fill="#808080"/>
+                <rect x="0" y="0" width="${width}" height="${height}" fill="#c0c0c0"/>
                 <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#red-grad-${uid})" />
-                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad-${uid})" style="mix-blend-mode: lighten" />
-                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="hsl(0,0%,${brightness}%)" style="filter:blur(6px);opacity:${this.config.opacity}" />
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad-${uid})" style="mix-blend-mode: darken" />
+                <rect x="3" y="3" width="${width - 6}" height="${height - 6}" rx="37" fill="#a0a0a0" style="filter:blur(4px);opacity:0.8" />
             </svg>
         `;
         
