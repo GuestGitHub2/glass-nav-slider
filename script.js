@@ -161,32 +161,51 @@ class SliderGlassEffect {
         if (!this.slider || !this.feImageRef) return;
         
         const rect = this.slider.getBoundingClientRect();
-        const width = rect.width || 100;
-        const height = rect.height || 60;
+        // FORCE INTEGERS: Solves sub-pixel rendering bugs on specific tab widths
+        const width = Math.ceil(rect.width) || 100;
+        const height = Math.ceil(rect.height) || 60;
         
+        // Optimization: Skip if size hasn't changed
+        if (this.lastWidth === width && this.lastHeight === height) return;
+        this.lastWidth = width;
+        this.lastHeight = height;
+        
+        // UNIQUE IDs: Prevents browser caching conflicts
+        const uid = Date.now(); 
+
         const svgContent = `
             <svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="red-grad" x1="100%" y1="0%" x2="0%" y2="0%">
-                        <stop offset="0%" stop-color="#0000"/>
+                    <linearGradient id="red-grad-${uid}" x1="100%" y1="0%" x2="0%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
                         <stop offset="100%" stop-color="red"/>
                     </linearGradient>
-                    <linearGradient id="blue-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#0000"/>
+                    <linearGradient id="blue-grad-${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
                         <stop offset="100%" stop-color="blue"/>
                     </linearGradient>
                 </defs>
-                <rect x="0" y="0" width="${width}" height="${height}" fill="black"/>
-                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#red-grad)" />
-                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad)" style="mix-blend-mode: difference" />
-                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="hsl(0 0% ${this.config.brightness}% / ${this.config.opacity})" style="filter:blur(8px)" />
+                
+                <rect x="0" y="0" width="${width}" height="${height}" fill="rgb(128, 128, 128)"/>
+                
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#red-grad-${uid})" />
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad-${uid})" style="mix-blend-mode: screen" />
+                
+                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="rgb(${this.config.brightness}%, ${this.config.brightness}%, ${this.config.brightness}%)" fill-opacity="${this.config.opacity}" style="filter:blur(8px)" />
             </svg>
         `;
         
         const dataUrl = `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
         this.feImageRef.setAttribute('href', dataUrl);
         
-        // Update displacement channels
+        // Update displacement settings
+        this.redChannelRef?.setAttribute('xChannelSelector', 'R');
+        this.redChannelRef?.setAttribute('yChannelSelector', 'B'); // Use Blue channel for Y axis
+        this.greenChannelRef?.setAttribute('xChannelSelector', 'R');
+        this.greenChannelRef?.setAttribute('yChannelSelector', 'B');
+        this.blueChannelRef?.setAttribute('xChannelSelector', 'R');
+        this.blueChannelRef?.setAttribute('yChannelSelector', 'B');
+
         this.redChannelRef?.setAttribute('scale', this.config.distortionScale.toString());
         this.greenChannelRef?.setAttribute('scale', (this.config.distortionScale + this.config.greenOffset).toString());
         this.blueChannelRef?.setAttribute('scale', (this.config.distortionScale + this.config.blueOffset).toString());
@@ -254,6 +273,9 @@ function renderSlider() {
     slider.style.transform = `translateX(${motion.pos}px)`;
     slider.style.width = `${motion.width}px`;
     currentSliderLeft = motion.pos;
+    
+    // This forces the glass filter to redraw its internal map to match the new width
+    if (sliderGlass) sliderGlass.updateDisplacementMap(); 
 }
 
 function setActiveItem(item) {
