@@ -178,49 +178,33 @@ body {
     border-radius: 40px;
     
     background: rgba(var(--base-r), var(--base-g), var(--base-b), 0.12);
-    background-image:
-        radial-gradient(120% 160% at var(--glow-x) var(--glow-y),
-            rgba(255, 255, 255, calc((0.12 + (var(--glassy-intensity) * 0.006)) * var(--glassy-proximity))),
-            rgba(255, 255, 255, 0) 60%
-        ),
-        linear-gradient(135deg,
-            rgba(255, 255, 255, 0.08) 0%,
-            rgba(255, 255, 255, 0.02) 60%,
-            rgba(255, 255, 255, 0) 100%
-        );
+    backdrop-filter: url(#slider-glass-filter) saturate(1.2);
+    -webkit-backdrop-filter: url(#slider-glass-filter) saturate(1.2);
     
-    backdrop-filter: blur(calc(2px + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.05)))) brightness(calc(1 + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.005))));
-    -webkit-backdrop-filter: blur(calc(2px + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.05)))) brightness(calc(1 + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.005))));
-    
-    border: 1px solid rgba(255, 255, 255, calc(0.22 + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.003))));
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.3 + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.0035)))),
-        inset 0 -1px 0 rgba(255, 255, 255, calc(0.08 + (var(--glassy-proximity) * (var(--glassy-intensity) * 0.0015)))),
-        0 6px 14px rgba(0, 0, 0, calc(0.16 + (var(--glassy-proximity) * 0.04)));
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.15);
     
     transition: none;
-    z-index: 1;
+    z-index: 2;
     cursor: grab;
 }
 .slider:active { cursor: grabbing; }
 
-.slider.is-grabbed {
-    background: rgba(var(--base-r), var(--base-g), var(--base-b), calc(0.16 + (var(--glassy-intensity) * 0.002)));
-    background-image:
-        radial-gradient(130% 160% at var(--glow-x) var(--glow-y),
-            rgba(255, 255, 255, calc(0.2 + (var(--glassy-intensity) * 0.0065))),
-            rgba(255, 255, 255, 0) 65%
-        ),
-        linear-gradient(135deg,
-            rgba(255, 255, 255, calc(0.12 + (var(--glassy-intensity) * 0.0025))) 0%,
-            rgba(210, 245, 255, calc(0.1 + (var(--glassy-intensity) * 0.002))) 55%,
-            rgba(255, 255, 255, 0.05) 100%
-        );
-    backdrop-filter: blur(calc(6px + (var(--glassy-intensity) * 0.06))) brightness(calc(1.05 + (var(--glassy-intensity) * 0.006)));
-    -webkit-backdrop-filter: blur(calc(6px + (var(--glassy-intensity) * 0.06))) brightness(calc(1.05 + (var(--glassy-intensity) * 0.006)));
-    border-color: rgba(255, 255, 255, calc(0.28 + (var(--glassy-intensity) * 0.0035)));
+.slider:hover {
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.6 + (var(--glassy-intensity) * 0.003))),
-        inset 0 -1px 0 rgba(255, 255, 255, calc(0.2 + (var(--glassy-intensity) * 0.002))),
-        0 14px 30px rgba(0, 0, 0, 0.24);
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+        0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.slider.is-grabbed {
+    background: rgba(var(--base-r), var(--base-g), var(--base-b), 0.16);
+    border-color: rgba(255, 255, 255, 0.45);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+        0 12px 28px rgba(0, 0, 0, 0.22);
 }

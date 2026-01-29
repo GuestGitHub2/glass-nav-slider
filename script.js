@@ -131,6 +131,72 @@ window.addEventListener('pointerup', (e) => {
 });
 
 
+// --- GLASS SLIDER SVG FILTER SETUP ---
+class SliderGlassEffect {
+    constructor() {
+        this.slider = document.querySelector('.slider');
+        this.feImageRef = document.getElementById('slider-fe-image');
+        this.redChannelRef = document.getElementById('slider-red-channel');
+        this.greenChannelRef = document.getElementById('slider-green-channel');
+        this.blueChannelRef = document.getElementById('slider-blue-channel');
+        this.gaussianBlurRef = document.getElementById('slider-blur');
+        
+        this.config = {
+            displace: 0.3,
+            distortionScale: -150,
+            redOffset: 0,
+            greenOffset: 8,
+            blueOffset: 16,
+            brightness: 45,
+            opacity: 0.9
+        };
+        
+        if (this.slider) {
+            this.updateDisplacementMap();
+            window.addEventListener('resize', () => this.updateDisplacementMap());
+        }
+    }
+    
+    updateDisplacementMap() {
+        if (!this.slider || !this.feImageRef) return;
+        
+        const rect = this.slider.getBoundingClientRect();
+        const width = rect.width || 100;
+        const height = rect.height || 60;
+        
+        const svgContent = `
+            <svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="red-grad" x1="100%" y1="0%" x2="0%" y2="0%">
+                        <stop offset="0%" stop-color="#0000"/>
+                        <stop offset="100%" stop-color="red"/>
+                    </linearGradient>
+                    <linearGradient id="blue-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#0000"/>
+                        <stop offset="100%" stop-color="blue"/>
+                    </linearGradient>
+                </defs>
+                <rect x="0" y="0" width="${width}" height="${height}" fill="black"/>
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#red-grad)" />
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad)" style="mix-blend-mode: difference" />
+                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="hsl(0 0% ${this.config.brightness}% / ${this.config.opacity})" style="filter:blur(8px)" />
+            </svg>
+        `;
+        
+        const dataUrl = `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
+        this.feImageRef.setAttribute('href', dataUrl);
+        
+        // Update displacement channels
+        this.redChannelRef?.setAttribute('scale', this.config.distortionScale.toString());
+        this.greenChannelRef?.setAttribute('scale', (this.config.distortionScale + this.config.greenOffset).toString());
+        this.blueChannelRef?.setAttribute('scale', (this.config.distortionScale + this.config.blueOffset).toString());
+        this.gaussianBlurRef?.setAttribute('stdDeviation', this.config.displace.toString());
+    }
+}
+
+// Initialize slider glass effect
+const sliderGlass = new SliderGlassEffect();
+
 // --- NAV SLIDER LOGIC WITH PHYSICS ---
 const nav = document.querySelector('.glass-nav');
 const listItems = document.querySelectorAll('.nav-links li');
@@ -296,21 +362,7 @@ function applyRubberBand(value, min, max, resistance) {
 }
 
 function updateGlassyFromPointer(e) {
-    if (!e) return;
-    const sliderRect = slider.getBoundingClientRect();
-    const x = Math.min(Math.max(e.clientX - sliderRect.left, 0), sliderRect.width);
-    const y = Math.min(Math.max(e.clientY - sliderRect.top, 0), sliderRect.height);
-
-    slider.style.setProperty('--glow-x', `${x}px`);
-    slider.style.setProperty('--glow-y', `${y}px`);
-
-    const centerX = sliderRect.left + sliderRect.width / 2;
-    const centerY = sliderRect.top + sliderRect.height / 2;
-    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
-    const maxDistance = Math.max(sliderRect.width * 0.8, 140);
-
-    const proximity = Math.max(0, Math.min(1, 1 - (distance / maxDistance)));
-    slider.style.setProperty('--glassy-proximity', proximity.toString());
+    // Removed - now using SVG filter effect
 }
 
 // Global Drag Preventer to fix "Browser thinks it's a link" bug

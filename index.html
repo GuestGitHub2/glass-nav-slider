@@ -68,6 +68,26 @@
     </div>
 
     <nav class="glass-nav">
+        <svg class="slider-filter" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <defs>
+                <filter id="slider-glass-filter" colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">
+                    <feImage id="slider-fe-image" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+                    
+                    <feDisplacementMap id="slider-red-channel" in="SourceGraphic" in2="map" result="dispRed" />
+                    <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red" />
+                    
+                    <feDisplacementMap id="slider-green-channel" in="SourceGraphic" in2="map" result="dispGreen" />
+                    <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green" />
+                    
+                    <feDisplacementMap id="slider-blue-channel" in="SourceGraphic" in2="map" result="dispBlue" />
+                    <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue" />
+                    
+                    <feBlend in="red" in2="green" mode="screen" result="rg" />
+                    <feBlend in="rg" in2="blue" mode="screen" result="output" />
+                    <feGaussianBlur id="slider-blur" in="output" stdDeviation="0" />
+                </filter>
+            </defs>
+        </svg>
         <div class="slider"></div>
         <ul class="nav-links">
             <li class="active">
