@@ -3,45 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Nav Slider</title>
+    <title>Ultimate Glass Configurator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="glass-nav">
-            <div class="slider">
-                <div class="slider-inner"></div>
+
+    <div class="controls-panel" id="controlsPanel">
+        <div class="panel-header" id="panelHeader">
+            <h3>Glass Forge</h3>
+            <button id="togglePanel"><i class="fa-solid fa-sliders"></i></button>
+        </div>
+        
+        <div class="panel-content">
+            <div class="section-title">Position</div>
+            <div class="control-row">
+                <div class="control-group half">
+                    <label>Pos X: <span id="val-posX">0</span></label>
+                    <input type="range" id="posX" min="-200" max="200" value="0">
+                </div>
+                <div class="control-group half">
+                    <label>Pos Y: <span id="val-posY">0</span></label>
+                    <input type="range" id="posY" min="-200" max="200" value="0">
+                </div>
             </div>
 
-            <ul class="nav-links">
-                <li class="nav-item active" data-index="0">
-                    <a href="#">
-                        <i class="fa-solid fa-house"></i>
-                        <span class="text">Home</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-index="1">
-                    <a href="#">
-                        <i class="fa-solid fa-box"></i>
-                        <span class="text">Box</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-index="2">
-                    <a href="#">
-                        <i class="fa-solid fa-compass"></i>
-                        <span class="text">Explore</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-index="3">
-                    <a href="#">
-                        <i class="fa-solid fa-user"></i>
-                        <span class="text">Profile</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+            <div class="section-title">Material</div>
+            <div class="control-group">
+                <label>Opacity: <span id="val-navOpacity">10</span>%</label>
+                <input type="range" id="navOpacity" min="0" max="100" value="10">
+            </div>
+            <div class="control-group">
+                <label>Blur: <span id="val-blurStrength">10</span>px</label>
+                <input type="range" id="blurStrength" min="0" max="40" value="10">
+            </div>
+            <div class="control-group">
+                <label>Saturation: <span id="val-saturation">180</span>%</label>
+                <input type="range" id="saturation" min="100" max="300" value="180">
+            </div>
+            <div class="control-group">
+                <label>Glassy: <span id="val-glassIntensity">35</span>%</label>
+                <input type="range" id="glassIntensity" min="0" max="100" value="35">
+            </div>
+
+            <div class="section-title">Edge & Depth</div>
+            <div class="control-group">
+                <label>Overshoot: <span id="val-overshoot">25</span>%</label>
+                <input type="range" id="overshoot" min="0" max="100" value="25">
+            </div>
+            <div class="control-group">
+                <label>Border: <span id="val-borderAlpha">40</span>%</label>
+                <input type="range" id="borderAlpha" min="0" max="100" value="40">
+            </div>
+             <div class="control-group">
+                <label>Shadow: <span id="val-shadowAlpha">30</span>%</label>
+                <input type="range" id="shadowAlpha" min="0" max="100" value="30">
+            </div>
+            
+            <div class="control-group">
+                <label>Theme: <span id="val-themeRange">255</span></label>
+                <input type="range" id="themeRange" min="0" max="255" value="255">
+            </div>
+        </div>
     </div>
+
+    <nav class="glass-nav">
+        <div class="slider"></div>
+        <ul class="nav-links">
+            <li class="active">
+                <a href="#" draggable="false"><i class="fa-solid fa-table-cells-large"></i><span>Dashboard</span></a>
+            </li>
+            <li>
+                <a href="#" draggable="false"><i class="fa-regular fa-calendar"></i><span>Upcoming</span></a>
+            </li>
+            <li>
+                <a href="#" draggable="false"><i class="fa-solid fa-chart-pie"></i><span>Analytics</span></a>
+            </li>
+             <li>
+                <a href="#" draggable="false"><i class="fa-solid fa-box-open"></i><span>Categories</span></a>
+            </li>
+            <li>
+                <a href="#" draggable="false"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+            </li>
+        </ul>
+    </nav>
 
     <script src="script.js"></script>
 </body>
