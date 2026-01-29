@@ -11,40 +11,143 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #111; /* Dark background to see the glass effect */
+    /* City skyline inspired gradient background */
+    background: 
+        linear-gradient(180deg, 
+            #0a0e27 0%, 
+            #1a1f3a 20%,
+            #2a2f4a 40%,
+            #3a3f5a 60%,
+            #4a4f6a 80%,
+            #5a5f7a 100%
+        );
+    background-attachment: fixed;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Simulating a phone screen */
-.phone-screen {
-    position: relative;
-    width: 375px;
-    height: 812px;
-    background: linear-gradient(45deg, #ff357a, #fff172); /* Colorful bg to show transparency */
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+/* City skyline effect using CSS */
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: 
+        linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%),
+        repeating-linear-gradient(
+            90deg,
+            #1a1f3a 0px,
+            #1a1f3a 80px,
+            #0a0e27 80px,
+            #0a0e27 100px,
+            #2a2f4a 100px,
+            #2a2f4a 150px,
+            #1a1f3a 150px,
+            #1a1f3a 180px,
+            #0a0e27 180px,
+            #0a0e27 220px,
+            #2a2f4a 220px,
+            #2a2f4a 250px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Add stars effect */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 40%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 80%, white, transparent),
+        radial-gradient(1px 1px at 15% 60%, white, transparent);
+    background-size: 200% 200%, 200% 200%, 250% 250%, 300% 300%, 200% 200%, 250% 250%, 200% 200%;
+    background-position: 0% 0%, 40% 60%, 50% 50%, 80% 10%, 90% 60%, 33% 80%, 15% 60%;
+    pointer-events: none;
+    opacity: 0.5;
+    animation: twinkle 3s ease-in-out infinite;
+    z-index: 0;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
 }
 
 /* --- THE GLASS NAVIGATION BAR --- */
 .glass-nav {
-    position: absolute;
-    bottom: 20px; /* Floating slightly above bottom */
-    left: 20px;
-    right: 20px;
-    height: 70px;
+    position: fixed;
+    height: 80px;
+    padding: 0 20px;
     
-    /* GLASS EFFECT MAGIC HERE */
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
-    backdrop-filter: blur(15px); /* Blurs whatever is behind it */
-    -webkit-backdrop-filter: blur(15px); /* For Safari support */
+    /* Enhanced GLASS effects with multiple layers */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle glass edge */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
     
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    /* Glass refraction layers */
+    position: relative;
+}
+
+/* Add a second glass layer for depth */
+.glass-nav::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+    border-radius: 23px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Desktop positioning - top middle */
+@media (min-width: 768px) {
+    .glass-nav {
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        min-width: 500px;
+    }
+}
+
+/* Mobile positioning - bottom middle */
+@media (max-width: 767px) {
+    .glass-nav {
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+    }
 }
 
 .nav-links {
@@ -52,12 +155,13 @@ body {
     width: 100%;
     position: relative;
     list-style: none;
-    z-index: 2; /* Sits on top of the slider */
+    z-index: 2;
+    gap: 10px;
 }
 
 .nav-links li {
     position: relative;
-    width: 25%; /* 4 items = 25% each */
+    flex: 1;
     text-align: center;
 }
 
@@ -69,43 +173,220 @@ body {
     align-items: center;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.7);
-    transition: 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    padding: 8px;
 }
 
 .nav-links li.active a {
-    color: #fff; /* Active icon becomes bright white */
+    color: #fff;
 }
 
 .nav-links li a i {
     font-size: 1.5em;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
 }
 
+.nav-links li.active a i {
+    transform: scale(1.1);
+}
+
+/* Display tab names at all times */
 .nav-links li a .text {
-    font-size: 0.75em;
+    font-size: 0.7em;
     font-weight: bold;
-    opacity: 0; /* Hide text initially */
-    transform: translateY(10px);
-    transition: 0.3s;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .nav-links li.active a .text {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1.05);
+    font-weight: 900;
 }
 
-/* --- THE SLIDING INDICATOR --- */
+/* --- THE SLIDING INDICATOR WITH PRISM EFFECT --- */
 .slider {
     position: absolute;
-    top: 5px; /* Slight padding inside the nav */
+    top: 50%;
+    transform: translateY(-50%);
     left: 0;
-    width: 25%; /* Matches the list item width */
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2); /* Lighter glass for the selection */
-    border-radius: 15px;
-    transition: 0.4s ease-in-out; /* Smooth sliding animation */
-    z-index: 1; /* Sits behind the text */
+    width: calc(25% - 10px);
+    height: 70px;
     
-    /* Optional: Add a glow effect to the slider */
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    /* Enhanced glass for the selection */
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.15) 100%
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    
+    /* Physics-based spring animation */
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+    
+    /* Enhanced glow and depth */
+    box-shadow: 
+        0 4px 20px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+    
+    overflow: hidden;
+    position: relative;
+}
+
+/* Prism effect - light bending at edges like a magnifying glass */
+.slider::before,
+.slider::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 30px;
+    pointer-events: none;
+}
+
+/* Left edge prism refraction */
+.slider::before {
+    left: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 100, 200, 0.3) 0%,
+        rgba(100, 200, 255, 0.2) 30%,
+        transparent 100%
+    );
+    border-radius: 20px 0 0 20px;
+    filter: blur(3px);
+}
+
+/* Right edge prism refraction */
+.slider::after {
+    right: 0;
+    background: linear-gradient(
+        270deg,
+        rgba(100, 200, 255, 0.3) 0%,
+        rgba(255, 100, 200, 0.2) 30%,
+        transparent 100%
+    );
+    border-radius: 0 20px 20px 0;
+    filter: blur(3px);
+}
+
+/* Additional prism overlay for chromatic aberration effect */
+.prism-overlay {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 20px;
+    background: 
+        radial-gradient(
+            ellipse at top left,
+            rgba(255, 100, 200, 0.15) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            ellipse at top right,
+            rgba(100, 200, 255, 0.15) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            ellipse at bottom left,
+            rgba(200, 255, 100, 0.15) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            ellipse at bottom right,
+            rgba(255, 200, 100, 0.15) 0%,
+            transparent 50%
+        );
+    pointer-events: none;
+    mix-blend-mode: screen;
+    animation: prismShift 3s ease-in-out infinite;
+}
+
+@keyframes prismShift {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+}
+
+/* Magnifying glass text distortion effect on hover */
+.nav-links li {
+    transition: all 0.3s ease;
+}
+
+.nav-links li:hover a .text {
+    letter-spacing: 0.5px;
+    transform: scale(1.05);
+}
+
+/* Add shimmer effect to glass */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.slider .prism-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .glass-nav {
+        height: 75px;
+        padding: 0 15px;
+    }
+    
+    .nav-links li a i {
+        font-size: 1.3em;
+    }
+    
+    .nav-links li a .text {
+        font-size: 0.65em;
+    }
+    
+    .slider {
+        height: 65px;
+    }
+}
+
+@media (min-width: 768px) {
+    .nav-links li a i {
+        font-size: 1.6em;
+    }
+    
+    .nav-links li a .text {
+        font-size: 0.75em;
+    }
 }
