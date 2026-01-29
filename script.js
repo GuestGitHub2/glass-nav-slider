@@ -10,11 +10,17 @@ let velocity = 0;
 const springStiffness = 0.15;  // Higher = stiffer spring
 const dampingFactor = 0.7;     // Higher = more damping (less bounce)
 
-// Function to calculate target position with accurate physics
+// Calculate accurate position accounting for gaps
 function moveSlider(index) {
-    // Calculate target position considering gaps
-    const itemWidth = 100 / list.length;
-    targetPosition = index * itemWidth;
+    // With 4 items and gap: 10px, we have 3 gaps = 30px total gap space
+    // Each item width = (100% - 30px) / 4 + (10px gap to the right except last)
+    // Position calculation needs to account for both item width and gaps
+    const totalGap = 30; // 3 gaps of 10px each
+    const itemWidthPercent = (100 - totalGap) / list.length;
+    const gapPercent = 10;
+    
+    // Calculate position: item_width * index + gap * index
+    targetPosition = (itemWidthPercent + gapPercent) * index;
 }
 
 // Physics animation loop with spring dynamics
@@ -62,28 +68,37 @@ list.forEach((item, index) => {
         animateSlider();
     });
     
-    // Add touch support for mobile
-    item.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+    // Add touch support for mobile - avoid passive: false warning
+    item.addEventListener('touchend', (e) => {
         item.click();
-    }, { passive: false });
+    });
 });
 
 // Add hover effects that mimic magnifying glass distortion
 list.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
         const text = item.querySelector('.text');
+        const isActive = item.classList.contains('active');
         if (text) {
-            // Simulate slight magnification on hover
-            text.style.transform = 'scale(1.08)';
+            // Simulate slight magnification on hover, preserve translateY for active items
+            if (isActive) {
+                text.style.transform = 'translateY(0) scale(1.08)';
+            } else {
+                text.style.transform = 'scale(1.08)';
+            }
             text.style.letterSpacing = '0.8px';
         }
     });
     
     item.addEventListener('mouseleave', () => {
         const text = item.querySelector('.text');
-        if (text && !item.classList.contains('active')) {
-            text.style.transform = 'scale(1)';
+        const isActive = item.classList.contains('active');
+        if (text) {
+            if (isActive) {
+                text.style.transform = 'translateY(0) scale(1.05)';
+            } else {
+                text.style.transform = 'scale(1)';
+            }
             text.style.letterSpacing = 'normal';
         }
     });
@@ -93,7 +108,10 @@ list.forEach((item, index) => {
 window.addEventListener('DOMContentLoaded', () => {
     const activeIndex = Array.from(list).findIndex(item => item.classList.contains('active'));
     if (activeIndex !== -1) {
-        currentPosition = (activeIndex * 100) / list.length;
+        const totalGap = 30;
+        const itemWidthPercent = (100 - totalGap) / list.length;
+        const gapPercent = 10;
+        currentPosition = (itemWidthPercent + gapPercent) * activeIndex;
         targetPosition = currentPosition;
         slider.style.transform = `translateX(${currentPosition}%) translateY(-50%)`;
     }

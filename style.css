@@ -211,9 +211,8 @@ body::after {
 .slider {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     left: 0;
-    width: calc(25% - 10px);
+    width: calc((100% - 30px) / 4);
     height: 70px;
     
     /* Enhanced glass for the selection */
@@ -228,8 +227,6 @@ body::after {
     border-radius: 20px;
     border: 2px solid rgba(255, 255, 255, 0.4);
     
-    /* Physics-based spring animation */
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 1;
     
     /* Enhanced glow and depth */
@@ -239,7 +236,6 @@ body::after {
         inset 0 -1px 0 rgba(255, 255, 255, 0.2);
     
     overflow: hidden;
-    position: relative;
 }
 
 /* Prism effect - light bending at edges like a magnifying glass */
@@ -324,15 +320,7 @@ body::after {
     }
 }
 
-/* Magnifying glass text distortion effect on hover */
-.nav-links li {
-    transition: all 0.3s ease;
-}
-
-.nav-links li:hover a .text {
-    letter-spacing: 0.5px;
-    transform: scale(1.05);
-}
+/* Magnifying glass text distortion effect - removed to avoid conflict with JS */
 
 /* Add shimmer effect to glass */
 @keyframes shimmer {
@@ -378,6 +366,7 @@ body::after {
     
     .slider {
         height: 65px;
+        width: calc((100% - 30px) / 4);
     }
 }
 
