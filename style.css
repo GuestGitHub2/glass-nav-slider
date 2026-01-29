@@ -1,0 +1,111 @@
+/* Reset basic settings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #111; /* Dark background to see the glass effect */
+}
+
+/* Simulating a phone screen */
+.phone-screen {
+    position: relative;
+    width: 375px;
+    height: 812px;
+    background: linear-gradient(45deg, #ff357a, #fff172); /* Colorful bg to show transparency */
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+}
+
+/* --- THE GLASS NAVIGATION BAR --- */
+.glass-nav {
+    position: absolute;
+    bottom: 20px; /* Floating slightly above bottom */
+    left: 20px;
+    right: 20px;
+    height: 70px;
+    
+    /* GLASS EFFECT MAGIC HERE */
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    backdrop-filter: blur(15px); /* Blurs whatever is behind it */
+    -webkit-backdrop-filter: blur(15px); /* For Safari support */
+    
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle glass edge */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    width: 100%;
+    position: relative;
+    list-style: none;
+    z-index: 2; /* Sits on top of the slider */
+}
+
+.nav-links li {
+    position: relative;
+    width: 25%; /* 4 items = 25% each */
+    text-align: center;
+}
+
+.nav-links li a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    transition: 0.3s;
+}
+
+.nav-links li.active a {
+    color: #fff; /* Active icon becomes bright white */
+}
+
+.nav-links li a i {
+    font-size: 1.5em;
+    margin-bottom: 4px;
+}
+
+.nav-links li a .text {
+    font-size: 0.75em;
+    font-weight: bold;
+    opacity: 0; /* Hide text initially */
+    transform: translateY(10px);
+    transition: 0.3s;
+}
+
+.nav-links li.active a .text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- THE SLIDING INDICATOR --- */
+.slider {
+    position: absolute;
+    top: 5px; /* Slight padding inside the nav */
+    left: 0;
+    width: 25%; /* Matches the list item width */
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2); /* Lighter glass for the selection */
+    border-radius: 15px;
+    transition: 0.4s ease-in-out; /* Smooth sliding animation */
+    z-index: 1; /* Sits behind the text */
+    
+    /* Optional: Add a glow effect to the slider */
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
