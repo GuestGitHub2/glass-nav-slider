@@ -142,13 +142,13 @@ class SliderGlassEffect {
         this.gaussianBlurRef = document.getElementById('slider-blur');
         
         this.config = {
-            displace: 0.3,
-            distortionScale: -150,
+            displace: 0.15,
+            distortionScale: -80,
             redOffset: 0,
-            greenOffset: 8,
-            blueOffset: 16,
-            brightness: 45,
-            opacity: 0.9
+            greenOffset: 4,
+            blueOffset: 8,
+            brightness: 50,
+            opacity: 0.85
         };
         
         if (this.slider) {
@@ -161,37 +161,32 @@ class SliderGlassEffect {
         if (!this.slider || !this.feImageRef) return;
         
         const rect = this.slider.getBoundingClientRect();
-        // FORCE INTEGERS: Solves sub-pixel rendering bugs on specific tab widths
         const width = Math.ceil(rect.width) || 100;
         const height = Math.ceil(rect.height) || 60;
         
-        // Optimization: Skip if size hasn't changed
         if (this.lastWidth === width && this.lastHeight === height) return;
         this.lastWidth = width;
         this.lastHeight = height;
         
-        // UNIQUE IDs: Prevents browser caching conflicts
-        const uid = Date.now(); 
+        const brightness = Math.round(this.config.brightness);
+        const uid = Date.now();
 
         const svgContent = `
             <svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="red-grad-${uid}" x1="100%" y1="0%" x2="0%" y2="0%">
-                        <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
-                        <stop offset="100%" stop-color="red"/>
+                        <stop offset="0%" stop-color="#00000000"/>
+                        <stop offset="100%" stop-color="#ff0000"/>
                     </linearGradient>
                     <linearGradient id="blue-grad-${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
-                        <stop offset="100%" stop-color="blue"/>
+                        <stop offset="0%" stop-color="#00000000"/>
+                        <stop offset="100%" stop-color="#0000ff"/>
                     </linearGradient>
                 </defs>
-                
-                <rect x="0" y="0" width="${width}" height="${height}" fill="rgb(128, 128, 128)"/>
-                
+                <rect x="0" y="0" width="${width}" height="${height}" fill="#808080"/>
                 <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#red-grad-${uid})" />
-                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad-${uid})" style="mix-blend-mode: screen" />
-                
-                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="rgb(${this.config.brightness}%, ${this.config.brightness}%, ${this.config.brightness}%)" fill-opacity="${this.config.opacity}" style="filter:blur(8px)" />
+                <rect x="0" y="0" width="${width}" height="${height}" rx="40" fill="url(#blue-grad-${uid})" style="mix-blend-mode: lighten" />
+                <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="38" fill="hsl(0,0%,${brightness}%)" style="filter:blur(6px);opacity:${this.config.opacity}" />
             </svg>
         `;
         
